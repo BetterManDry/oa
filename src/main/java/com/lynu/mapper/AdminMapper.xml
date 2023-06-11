@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lynu.mapper.AdminMapper" >
+  <resultMap id="BaseResultMap" type="com.lynu.bean.Admin" >
+    <id column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
+    <result column="admin_code" property="adminCode" jdbcType="VARCHAR" />
+    <result column="admin_pwd" property="adminPwd" jdbcType="VARCHAR" />
+    <result column="admin_photo" property="adminPhoto"/>
+    <result column="admin_email" property="adminEmail" />
+    <result column="admin_tel" property="adminTel" />
+    <result column="admin_remarks" property="adminRemarks" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    admin_id, admin_name, admin_code, admin_pwd,admin_photo,admin_email,admin_tel,admin_remarks
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from admininfo
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from admininfo
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lynu.bean.Admin" >
+    insert into admininfo (admin_id, admin_name, admin_code, 
+      admin_pwd)
+    values (#{adminId,jdbcType=INTEGER}, #{adminName,jdbcType=VARCHAR}, #{adminCode,jdbcType=VARCHAR}, 
+      #{adminPwd,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lynu.bean.Admin" >
+    insert into admininfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="adminName != null" >
+        admin_name,
+      </if>
+      <if test="adminCode != null" >
+        admin_code,
+      </if>
+      <if test="adminPwd != null" >
+        admin_pwd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="adminName != null" >
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminCode != null" >
+        #{adminCode,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPwd != null" >
+        #{adminPwd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+<!--  boolean updateByPrimaryKeySelective(Admin record);-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.lynu.bean.Admin" >
+    update admininfo
+    <set >
+      <if test="adminName != null" >
+        admin_name = #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminCode != null" >
+        admin_code = #{adminCode,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPwd != null" >
+        admin_pwd = #{adminPwd,jdbcType=VARCHAR},
+      </if>
+        <if test="adminPhoto !=null">
+          admin_photo = #{adminPhoto},
+        </if>
+        <if test="adminEmail != null">
+          admin_email = #{adminEmail},
+        </if>
+        <if test="adminTel != null">
+          admin_tel = #{adminTel},
+        </if>
+        <if test="adminRemarks != null">
+          admin_remarks = #{adminRemarks},
+        </if>
+    </set>
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lynu.bean.Admin" >
+    update admininfo
+    set admin_name = #{adminName,jdbcType=VARCHAR},
+      admin_code = #{adminCode,jdbcType=VARCHAR},
+      admin_pwd = #{adminPwd,jdbcType=VARCHAR}
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  <select id="loginAdmin" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from admininfo where admin_code=#{adminCode}  and admin_pwd=#{adminPwd}
+  </select>
+
+
+
+
+
+
+</mapper>

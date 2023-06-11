@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lynu.mapper.AskForLeaveMapper" >
+    <resultMap id="BaseResultMap" type="com.lynu.bean.AskForLeave" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="emp_id" property="empId" jdbcType="INTEGER" />
+        <result column="from_type" property="fromType" jdbcType="VARCHAR" />
+        <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+        <result column="end_time" property="endTime" jdbcType="INTEGER" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, emp_id, from_type, start_time, end_time, reason, create_time, state
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from ask_for_leave
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from ask_for_leave
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.lynu.bean.AskForLeave" >
+        insert into ask_for_leave (id, emp_id, from_type,
+        start_time, end_time, reason,
+        create_time, state)
+        values (#{id,jdbcType=INTEGER}, #{empId,jdbcType=INTEGER}, #{fromType,jdbcType=VARCHAR},
+        #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR},
+        #{createTime,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.lynu.bean.AskForLeave" >
+        insert into ask_for_leave
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="empId != null" >
+                emp_id,
+            </if>
+            <if test="fromType != null" >
+                from_type,
+            </if>
+            <if test="startTime != null" >
+                start_time,
+            </if>
+            <if test="endTime != null" >
+                end_time,
+            </if>
+            <if test="reason != null" >
+                reason,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="empId != null" >
+                #{empId,jdbcType=INTEGER},
+            </if>
+            <if test="fromType != null" >
+                #{fromType,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null" >
+                #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null" >
+                #{endTime,jdbcType=INTEGER},
+            </if>
+            <if test="reason != null" >
+                #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null" >
+                #{state,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lynu.bean.AskForLeave" >
+        update ask_for_leave
+        <set >
+            <if test="empId != null" >
+                emp_id = #{empId,jdbcType=INTEGER},
+            </if>
+            <if test="fromType != null" >
+                from_type = #{fromType,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null" >
+                start_time = #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime,jdbcType=INTEGER},
+            </if>
+            <if test="reason != null" >
+                reason = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.lynu.bean.AskForLeave" >
+        update ask_for_leave
+        set emp_id = #{empId,jdbcType=INTEGER},
+        from_type = #{fromType,jdbcType=VARCHAR},
+        start_time = #{startTime,jdbcType=VARCHAR},
+        end_time = #{endTime,jdbcType=INTEGER},
+        reason = #{reason,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=VARCHAR},
+        state = #{state,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectCount" resultType="int">
+        select count(0) from ask_for_leave where emp_id=#{empId}
+    </select>
+
+    <select id="selectAfls" resultMap="BaseResultMap">
+        select * from ask_for_leave
+        where emp_id = #{empId,jdbcType=INTEGER} limit #{pageIndex},#{pageSize}
+    </select>
+
+    <select id="selectEmpAflByState" resultMap="BaseResultMap">
+        select * from ask_for_leave
+        where state=0 limit #{pageIndex},#{pageSize}
+    </select>
+
+    <select id="selectCountAfl" resultType="int">
+        select count(0)  from ask_for_leave
+        where state=0
+    </select>
+
+    <update id="updateAskForLeaveById">
+        update ask_for_leave set state =1 where id=#{id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lynu.mapper.DeptMapper">
+  <resultMap id="BaseResultMap" type="com.lynu.bean.Dept">
+    <id column="dept_no" jdbcType="INTEGER" property="deptNo" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="dept_addr" jdbcType="VARCHAR" property="deptAddr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dept_no, dept_name, dept_addr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dept
+    where dept_no = #{deptNo,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dept
+    where dept_no = #{deptNo,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lynu.bean.Dept">
+    insert into dept (dept_no, dept_name, dept_addr
+      )
+    values (#{deptNo,jdbcType=INTEGER}, #{deptName,jdbcType=VARCHAR}, #{deptAddr,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lynu.bean.Dept">
+    insert into dept
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deptNo != null">
+        dept_no,
+      </if>
+      <if test="deptName != null">
+        dept_name,
+      </if>
+      <if test="deptAddr != null">
+        dept_addr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deptNo != null">
+        #{deptNo,jdbcType=INTEGER},
+      </if>
+      <if test="deptName != null">
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptAddr != null">
+        #{deptAddr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lynu.bean.Dept">
+    update dept
+    <set>
+      <if test="deptName != null">
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptAddr != null">
+        dept_addr = #{deptAddr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dept_no = #{deptNo,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lynu.bean.Dept">
+    update dept
+    set dept_name = #{deptName,jdbcType=VARCHAR},
+      dept_addr = #{deptAddr,jdbcType=VARCHAR}
+    where dept_no = #{deptNo,jdbcType=INTEGER}
+  </update>
+
+  <select id="selAllDept" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dept where dept_del = 1
+  </select>
+
+  <select id="selDeptName" resultMap="BaseResultMap">
+    select dept_name from dept where dept_no = #{deptNo}
+  </select>
+
+  <select id="selDeptNo" resultMap="BaseResultMap">
+    select dept_no from dept where dept_name = #{deptName}
+  </select>
+
+  <select id="selDept" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from dept where dept_no = #{deptNo}
+  </select>
+
+  <select id="selDeptNameById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dept where dept_name like '%' #{deptName} '%'
+  </select>
+<!--   boolean delMore(String ids);-->
+  <delete id="delMore">
+    delete from dept
+    where dept_no in (${ids})
+  </delete>
+<!--  //逻辑删除-->
+<!--  int logiDel(Integer deptNo);-->
+  <update id="logiDel">
+    update dept set dept_del = 0 where dept_no = #{deptNo}
+  </update>
+<!--  //批量逻辑删除
+    int logiDelMore(String ids);-->
+  <update id="logiDelMore">
+    update dept set dept_del = 0 where dept_no in (${ids})
+  </update>
+  <!--  //查询总条数
+    int getCount();-->
+  <select id="getCount" resultType="int">
+    select count(*) from dept where dept_del = 1
+    <if test="likeName!=null and likeName!=''">
+      and dept_name  like '%' #{likeName} '%'
+    </if>
+  </select>
+  <!--  查询-->
+  <select id="selAll" resultMap="BaseResultMap">
+    select * from dept
+    where dept_del = 1
+    <if test="likeName!=null">
+      and dept_name like '%' #{likeName} '%'
+    </if>
+    limit #{index},#{pageSize}
+  </select>
+
+</mapper>

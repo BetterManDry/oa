@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lynu.mapper.CheckAttenMapper">
+    <resultMap id="BaseResultMap" type="com.lynu.bean.CheckAtten">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="emp_id" property="empId" jdbcType="INTEGER"/>
+        <result column="attendance_day" property="attendanceDay" jdbcType="INTEGER"/>
+        <result column="work_time" property="workTime" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , emp_id, attendance_day,work_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from check_attendance
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from check_attendance
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.lynu.bean.CheckAtten">
+        insert into check_attendance (id, emp_id, attendance_day, work_time)
+        values (#{id,jdbcType=INTEGER}, #{empId,jdbcType=INTEGER}, #{attendanceDay,jdbcType=INTEGER}, #{workTime})
+    </insert>
+    <insert id="insertSelective" parameterType="com.lynu.bean.CheckAtten">
+        insert into check_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="empId != null">
+                emp_id,
+            </if>
+            <if test="attendanceDay != null">
+                attendance_day,
+            </if>
+            <if test="workTime != null">
+                work_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="empId != null">
+                #{empId,jdbcType=INTEGER},
+            </if>
+            <if test="attendanceDay != null">
+                #{attendanceDay,jdbcType=INTEGER},
+            </if>
+            <if test="workTime != null">
+                #{workTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lynu.bean.CheckAtten">
+        update check_attendance
+        <set>
+            <if test="empId != null">
+                emp_id = #{empId,jdbcType=INTEGER},
+            </if>
+            <if test="attendanceDay != null">
+                attendance_day = #{attendanceDay,jdbcType=INTEGER},
+            </if>
+            <if test="workTime != null">
+                work_time = #{workTime},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.lynu.bean.CheckAtten">
+        update check_attendance
+        set emp_id         = #{empId,jdbcType=INTEGER},
+            attendance_day = #{attendanceDay,jdbcType=INTEGER} work_time = #{workTime}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateCheckAtten">
+        update check_attendance
+        set attendance_day = attendance_day + 1,
+            work_time = #{i}
+        where emp_id = #{empId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectCheckAttenByEmpId" resultMap="BaseResultMap">
+        select *
+        from check_attendance
+        where emp_id = #{empId,jdbcType=INTEGER}
+    </select>
+</mapper>

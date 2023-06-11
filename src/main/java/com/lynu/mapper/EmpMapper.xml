@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lynu.mapper.EmpMapper">
+  <resultMap id="BaseResultMap" type="com.lynu.bean.Emp">
+    <id column="emp_no" jdbcType="INTEGER" property="empNo" />
+    <result column="emp_name" jdbcType="VARCHAR" property="empName" />
+    <result column="emp_job" jdbcType="VARCHAR" property="empJob" />
+    <result column="emp_photo" jdbcType="VARCHAR" property="empPhoto" />
+    <result column="emp_hiredate" jdbcType="VARCHAR" property="empHiredate" />
+    <result column="emp_sal" jdbcType="DOUBLE" property="empSal" />
+    <result column="dept_no" property="deptNo"/>
+    <result column="dept_name" property="deptName"/>
+    <result column="emp_pw" property="empPw"/>
+    <result column="emp_phone" property="empPhone"/>
+    <result column="emp_email" property="empEmail"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    emp_no,emp_name,emp_job,emp_photo,emp_hiredate,emp_sal,dept_no,dept_name,emp_pw,emp_phone,emp_email
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from emp
+    where emp_no = #{empNo,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from emp
+    where emp_no = #{empNo,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lynu.bean.Emp">
+    insert into emp (emp_no, emp_name, emp_job, 
+      emp_photo, emp_hiredate, emp_sal
+      )
+    values (#{empNo,jdbcType=INTEGER}, #{empName,jdbcType=VARCHAR}, #{empJob,jdbcType=VARCHAR}, 
+      #{empPhoto,jdbcType=VARCHAR}, #{empHiredate,jdbcType=VARCHAR}, #{empSal,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lynu.bean.Emp">
+    insert into emp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="empNo != null">
+        emp_no,
+      </if>
+      <if test="empName != null">
+        emp_name,
+      </if>
+      <if test="empJob != null">
+        emp_job,
+      </if>
+      <if test="empPhoto != null">
+        emp_photo,
+      </if>
+      <if test="empHiredate != null">
+        emp_hiredate,
+      </if>
+      <if test="empSal != null">
+        emp_sal,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="empNo != null">
+        #{empNo,jdbcType=INTEGER},
+      </if>
+      <if test="empName != null">
+        #{empName,jdbcType=VARCHAR},
+      </if>
+      <if test="empJob != null">
+        #{empJob,jdbcType=VARCHAR},
+      </if>
+      <if test="empPhoto != null">
+        #{empPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="empHiredate != null">
+        #{empHiredate,jdbcType=VARCHAR},
+      </if>
+      <if test="empSal != null">
+        #{empSal,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lynu.bean.Emp">
+    update emp
+    <set>
+      <if test="empNo != 0">
+        emp_no = #{empNo},
+      </if>
+      <if test="empName != null and empName!=''">
+        emp_name = #{empName},
+      </if>
+      <if test="empJob != null and empJob!=''">
+        emp_job = #{empJob},
+      </if>
+      <if test="empPhoto != null and empPhoto!=''">
+        emp_photo = #{empPhoto},
+      </if>
+      <if test="empHiredate != null and empHiredate!=''">
+        emp_hiredate = #{empHiredate},
+      </if>
+      <if test="empSal!=0 and empSal!=''">
+        emp_sal = #{empSal},
+      </if>
+      <if test="deptNo != 0 and deptNo!=''">
+        dept_no = #{deptNo},
+      </if>
+      <if test="deptName != null and deptName!=''">
+        dept_name = #{deptName},
+      </if>
+    </set>
+    where emp_no = #{empNo,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lynu.bean.Emp">
+    update emp
+    set emp_name = #{empName,jdbcType=VARCHAR},
+      emp_job = #{empJob,jdbcType=VARCHAR},
+      emp_photo = #{empPhoto,jdbcType=VARCHAR},
+      emp_hiredate = #{empHiredate,jdbcType=VARCHAR},
+      emp_sal = #{empSal,jdbcType=DOUBLE},
+      dept_name=#{deptName}
+    where emp_no = #{empNo,jdbcType=INTEGER}
+  </update>
+<!--  查询-->
+  <select id="selAll" resultMap="BaseResultMap">
+    select * from emp
+    where emp_del = 1
+      <if test="likeName!=null">
+        and emp_name like '%' #{likeName} '%'
+      </if>
+    limit #{index},#{pageSize}
+  </select>
+
+  <insert id="addEmp" parameterType="com.lynu.bean.Emp">
+    insert into emp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="empNo != 0">
+        emp_no,
+      </if>
+      <if test="empName != null and empName!=''">
+        emp_name,
+      </if>
+      <if test="empJob != null and empJob!=''">
+        emp_job,
+      </if>
+      <if test="empPhoto != null and empPhoto!=''">
+        emp_photo,
+      </if>
+      <if test="empHiredate != null and empHiredate!=''">
+        emp_hiredate,
+      </if>
+      <if test="empSal!=0">
+        emp_sal,
+      </if>
+        <if test="deptNo != 0">
+          dept_no,
+        </if>
+        <if test="deptName != null and deptName!=''">
+          dept_name
+        </if>
+    </trim>
+    <trim prefix="values(" suffix=")" suffixOverrides=",">
+      <if test="empNo != 0">
+        #{empNo},
+      </if>
+      <if test="empName != null and empName!=''">
+        #{empName},
+      </if>
+      <if test="empJob != null and empJob!=''">
+        #{empJob},
+      </if>
+      <if test="empPhoto != null and empPhoto!=''">
+        #{empPhoto},
+      </if>
+      <if test="empHiredate != null and empHiredate!=''">
+        #{empHiredate},
+      </if>
+      <if test="empSal!=0">
+        #{empSal},
+      </if>
+      <if test="deptNo != 0">
+        #{deptNo},
+      </if>
+      <if test="deptName != null and deptName!=''">
+        #{deptName},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selEmpNo" resultMap="BaseResultMap">
+    select * from emp where emp_no=#{empNo}
+  </select>
+
+  <update id="updateEmp" parameterType="com.lynu.bean.Emp">
+    update emp set
+    <trim suffixOverrides=",">
+      <if test="empName != null and empName != ''">
+        emp_name = #{empName},
+      </if>
+      <if test="empJob != null and empJob!=''">
+        emp_job = #{empJob},
+      </if>
+      <if test="empPhoto != null and empPhoto!=''">
+        emp_photo = #{empPhoto},
+      </if>
+      <if test="empHiredate != null and empHiredate!=''">
+        emp_hiredate = #{empHiredate},
+      </if>
+      <if test="empSal!=0">
+        emp_sal = #{empSal},
+      </if>
+      <if test="deptNo != 0">
+        dept_no = #{deptNo},
+      </if>
+      <if test="deptName != null and deptName!=''">
+        dept_name = #{deptName},
+      </if>
+    </trim>
+        where emp_no = #{empNo}
+  </update>
+
+  <select id="checkEmpName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from emp where emp_name like '%' #{empName} '%'
+  </select>
+<!--  //查询总条数
+    int getCount(likeName);-->
+  <select id="getCount" resultType="int">
+    select count(*) from emp where emp_del = 1
+    <if test="likeName!=null and likeName!=''">
+    and emp_name  like '%' #{likeName} '%'
+    </if>
+  </select>
+<!--  逻辑删除
+    int logiDel(Integer empNo);-->
+  <update id="logiDel">
+    update emp set emp_del = 0 where emp_no = #{empNo}
+  </update>
+  <!--  //批量逻辑删除
+    int logiDelMore(String ids);-->
+  <update id="logiDelMore">
+    update emp set emp_del = 0 where emp_no in (${ids})
+  </update>
+<!--查询员工-->
+  <select id="selectEmpByNameAndPass" resultMap="BaseResultMap">
+    select * from emp where emp_name=#{empName} and emp_pw=#{empPw}
+  </select>
+
+<!--  修改密码-->
+  <update id="updateEmpPass">
+    update emp set emp_pw=#{newPass} where emp_no=#{id}
+  </update>
+
+<!--  检测原密码-->
+  <select id="selectEmpPassById" resultMap="BaseResultMap">
+    select * from emp where emp_no=#{empNo} and emp_pw=#{mPass}
+  </select>
+
+  <update id="updateEmpPersonal">
+    update emp set
+    <trim suffixOverrides=",">
+      <if test="empName != null and empName != ''">
+        emp_name = #{empName},
+      </if>
+      <if test="empJob != null and empJob!=''">
+        emp_job = #{empJob},
+      </if>
+      <if test="empPhoto != null and empPhoto!=''">
+        emp_photo = #{empPhoto},
+      </if>
+      <if test="empHiredate != null and empHiredate!=''">
+        emp_hiredate = #{empHiredate},
+      </if>
+      <if test="empSal!=null and empSal!=''">
+        emp_sal = #{empSal},
+      </if>
+      <if test="deptNo!=null and deptNo!=''">
+        dept_no = #{deptNo},
+      </if>
+      <if test="deptName != null and deptName!=''">
+        dept_name = #{deptName},
+      </if>
+      <if test="empPw != null and empPw!=''">
+        emp_pw = #{empPw},
+      </if>
+      <if test="empPhone != null and empPhone!=''">
+        emp_phone = #{empPhone},
+      </if>
+      <if test="empEmail != null and empEmail!=''">
+        emp_email = #{empEmail},
+      </if>
+    </trim>
+    where emp_no=#{empNo}
+  </update>
+
+  <select id="selectEmpNameById" resultType="string">
+    select emp_name from emp where emp_no=#{empId}
+  </select>
+
+
+</mapper>

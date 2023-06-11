@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lynu.mapper.AnnoMapper" >
+    <resultMap id="annoResuleMap" type="com.lynu.bean.Anno">
+        <id column="anno_id" property="annoId"/>
+        <result column="anno_name" property="annoName"/>
+        <result column="anno_content" property="annoContent"/>
+        <result column="anno_by" property="annoBy"/>
+        <result column="start_date" property="startDate"/>
+        <result column="anno_days" property="annoDays"/>
+        <result column="anno_del" property="annoDel"/>
+    </resultMap>
+
+    <!--  //查询总条数
+    int getCount();-->
+    <select id="getCount" resultType="int">
+        select count(0) from anno where anno_del = 1
+    </select>
+
+<!--    //全查询
+    List<Anno> selAll(@Param("index") int index, @Param("pageSize") int pageSize);-->
+    <select id="selAll" resultMap="annoResuleMap">
+        select * from anno where anno_del = 1 limit #{index},#{pageSize}
+    </select>
+
+<!--    //添加公告
+    int addAnno(Anno anno);-->
+    <insert id="addAnno" parameterType="com.lynu.bean.Anno">
+        insert into anno
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="annoId != 0">
+                anno_id,
+            </if>
+            <if test="annoName != null and annoName!=''">
+                anno_name,
+            </if>
+            <if test="annoContent != null and annoContent!=''">
+                anno_content,
+            </if>
+            <if test="annoBy != null and annoBy!=''">
+                anno_by,
+            </if>
+            <if test="startDate != null and startDate!=''">
+                start_date,
+            </if>
+            <if test="annoDays != null and annoDays!=''">
+                anno_days,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="annoId != 0">
+                #{annoId},
+            </if>
+            <if test="annoName != null and annoName!=''">
+                #{annoName},
+            </if>
+            <if test="annoContent != null and annoContent!=''">
+                #{annoContent},
+            </if>
+            <if test="annoBy != null and annoBy!=''">
+                #{annoBy},
+            </if>
+            <if test="startDate != null and startDate!=''">
+                #{startDate},
+            </if>
+            <if test="annoDays != null and annoDays!=''">
+                #{annoDays},
+            </if>
+        </trim>
+    </insert>
+<!--    //单挑查询
+    Anno selOne(Integer id);-->
+    <select id="selOne" resultMap="annoResuleMap">
+        select * from anno where anno_id = #{id}
+    </select>
+<!--    //修改
+    int updateAnno(Anno anno);-->
+    <update id="updateAnno">
+        update anno set
+        <trim suffixOverrides=",">
+            <if test="annoName != null and annoName!=''">
+                anno_name = #{annoName},
+            </if>
+            <if test="annoContent != null and annoContent!=''">
+                anno_content = #{annoContent},
+            </if>
+            <if test="annoBy != null and annoBy!=''">
+                anno_by = #{annoBy},
+            </if>
+            <if test="startDate != null and startDate!=''">
+                start_date = #{startDate},
+            </if>
+            <if test="annoDays != null and annoDays!=''">
+                anno_Days = #{annoDays},
+            </if>
+        </trim>
+        where anno_id = #{annoId}
+    </update>
+<!--    //主键删除
+    int delAnno(Integer annoId);-->
+    <update id="delAnno">
+        update anno set anno_del = 0 where anno_id = #{annoId}
+    </update>
+
+    <!--  //批量逻辑删除
+    int delMore(String ids);-->
+    <update id="delMore">
+        update anno set anno_del = 0 where anno_id in (${ids})
+    </update>
+
+
+</mapper>
